@@ -1,0 +1,125 @@
+using namespace std;
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+class Vector {
+private:
+    float* coord;
+    int n;
+public:
+    Vector(int a) {
+        n = a;
+        coord = new float[n];
+        for (int i = 0; i < n; i++) {
+            coord[i] = 0;
+        }
+    }
+    float vecLength() {
+        float length = 0;
+        for (int i = 0; i < n; i++) length += this->coord[i] * this->coord[i];
+        return sqrt(length);
+    }
+    float scalarMult(Vector other) {
+        float scalMult = 0;
+        for (int i = 0; i < n; i++) {
+            scalMult += this->coord[i] * other.coord[i];
+        }
+        return scalMult;
+    }
+    float cos(Vector other) {
+        float sM = scalarMult(other);
+        float l1 = this->vecLength();
+        float l2 = other.vecLength();
+        return sM / (l1 * l2);
+    }
+    Vector operator +(const Vector& other) {
+        Vector sum(n);
+        for (int i = 0; i < n; i++) sum.coord[i] = this->coord[i] + other.coord[i];
+        return sum;
+    }
+    Vector operator *(const float& mult) {
+        Vector newvec(n);
+        for (int i = 0; i < n; i++) newvec.coord[i] = this->coord[i] * mult;
+        return newvec;
+    }
+    bool operator ==(Vector& other) {
+        float l1,l2;
+        l1 = this->vecLength();
+        l2 = other.vecLength();
+        return l1 == l2;
+    }
+    bool operator !=(Vector& other) {
+        float l1, l2;
+        l1 = this->vecLength();
+        l2 = other.vecLength();
+        return l1 != l2;
+    }
+    bool operator >(Vector& other) {
+        float l1, l2;
+        l1 = this->vecLength();
+        l2 = other.vecLength();
+        return l1 > l2;
+    }
+    bool operator <(Vector& other) {
+        float l1, l2;
+        l1 = this->vecLength();
+        l2 = other.vecLength();
+        return l1 < l2;
+    }
+   ~Vector() {}
+    friend ostream& operator<<(ostream& out, const Vector& s);
+    friend istream& operator >>(istream& in, Vector& s);
+};
+ostream& operator<<(ostream& out, const Vector& s) {
+    out << "(";
+    for (int i = 0; i < s.n; i++) {
+        if (i == s.n - 1) {
+            out << s.coord[i];
+            break;
+        }
+        out << s.coord[i] << " ";
+    }
+    out << ")";
+    return out;
+}
+istream& operator >>(istream& in, Vector& s) {
+    for (int i = 0; i < s.n; i++) {
+        in >> s.coord[i];
+    }
+    return in;
+}
+
+
+int main()
+{
+    setlocale(LC_ALL, "RUS");
+    int a;
+    cout << "Сколько координат: " << endl;
+    cin >> a;
+    cout << "Введите координаты 1-го вектора" << endl;
+    Vector z(a);
+    cin >> z;
+    cout << "Первый вектоp: " << z << endl;
+    cout << "Введите координаты 2-го вектора" << endl;
+    Vector z1(a);
+    cin >> z1;
+    cout << "Второй вектор: " << z1 << endl;;
+    bool rawn = z == z1;
+    bool nerawn = z != z1;
+    bool bol = z > z1;
+    bool men = z < z1;
+    cout << "Логические функции: " << endl;
+    cout << "Z == Z1: " << rawn << endl;
+    cout << "Z != Z1: " << nerawn << endl;
+    cout << "Z > Z1: " << bol << endl;
+    cout << "Z < Z1: " << men << endl;
+    cout << "Произведение первого вектора на число (для примера - на 3): ";
+    cout << z * 3 << endl;
+    cout << "Скалярное произведение векторов: " << z.scalarMult(z1) << endl;
+    cout << "Сумма векторов: ";
+    Vector sum = z + z1;
+    cout << sum << endl;
+    cout << "Косинус угла между векторами: " << z.cos(z1);
+    return 0;
+}
