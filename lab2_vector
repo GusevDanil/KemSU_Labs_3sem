@@ -23,13 +23,13 @@ public:
     }
     float vecLength() {
         float length = 0;
-        for (int i = 0; i < n; i++) length += this->coord[i] * this->coord[i];
+        for (int i = 0; i < n; i++) length += coord[i] * coord[i];
         return sqrt(length);
     }
     float scalarMult(Vector other) {
         float scalMult = 0;
         for (int i = 0; i < n; i++) {
-            scalMult += this->coord[i] * other.coord[i];
+            scalMult += coord[i] * other.coord[i];
         }
         return scalMult;
     }
