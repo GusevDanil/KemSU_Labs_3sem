@@ -1,0 +1,74 @@
+#include <iostream>
+
+using namespace std;
+
+class Table
+{
+	int* size;
+	string color;
+public:
+	Table() {}
+	Table(int a, string str) {
+			size = new int;
+			*size = a;
+			color = str;
+	};
+	~Table() { delete size; }
+	void Show() { cout << "Стол: " << endl <<  "Размер: " << *size << " | " << " Цвет: " << color << endl; }
+	int CalcVolume() { return (*size) * (*size) * (*size); }
+};
+
+class CompTable : public Table {
+	int* h;
+	string material;
+public:
+	CompTable() {};
+	CompTable(int size, string color, int H, string Mater) :Table(size, color) {
+		try {
+			if (H <= 0) throw "Это не компьютерный стол.";
+			h = new int;
+			*h = H;
+			material = Mater;
+		}
+		catch (const char* exception) { cerr << "Ошибка: " << exception << endl; }
+	}
+	~CompTable() { delete h; }
+	int CalcVolumeCT() { return CalcVolume() + (*h) * (*h) * (*h); }
+	void ShowCT() {
+		Show();
+		cout << "Подставка: " << *h << " | " << material << endl;
+	}
+};
+
+class NewTable : public Table {
+	int* n;
+public:
+	NewTable() {};
+	NewTable(int size, string color, int N) :Table(size, color) {
+		n = new int;
+		*n = N;
+	};
+	~NewTable() { delete n; };
+	int CalcVolumeNT() { return CalcVolume() + 5 * (*n); };
+	void ShowNT() {
+		Show();
+		cout << "Количество полочек, объемом 5: " << *n << endl;
+	};
+};
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	Table MyT(3, "white");
+	MyT.Show();
+	cout << "Обьём: " << MyT.CalcVolume() << endl;
+	CompTable CT(5, "black", 3, "wood");
+	CT.ShowCT();
+	cout << "Обьём: " << CT.CalcVolumeCT() << endl;
+	NewTable NT(2, "green", 5);
+	NT.ShowNT();
+	cout << "Объем: " << NT.CalcVolumeNT() << endl;
+	return 0;
+}
+
+
