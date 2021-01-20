@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+class complex
+{
+private:
+    float re, im;
+public:
+    complex() {};
+    complex(float inp_re, float inp_im) {
+        re = inp_re;
+        im = inp_im;
+    }
+    complex(const complex& copy) {
+        re = copy.re;
+        im = copy.im;
+    }
+    void output() {
+        if (re != 0) cout << re;
+        if (im > 0 && im != 1) cout << "+" << im << "*i";
+        if (im < 0 && im != -1) cout << im << "*i";
+        if (im == 0 && re == 0) cout << "0";
+        if (im == 1 && re != 0) cout << "+i";
+        if (im == 1 && re == 0) cout << "i";
+        if (im == -1) cout << "-i";
+    }
+    void input(float i_re, float i_im) {
+        re = i_re;
+        im = i_im;
+    }
+    float module() { return sqrt(re * re + im * im); }
+    complex operator+ (const complex& c) {
+        complex temp;
+        temp.re = re + c.re;
+        temp.im = im + c.im;
+        return temp;
+    }
+    complex operator- (const complex& c) {
+        complex temp;
+        temp.re = re - c.re;
+        temp.im = im - c.im;
+        return temp;
+    }
+    complex operator* (const complex& c) {
+        complex temp;
+        temp.re = re * c.re - im * c.im;
+        temp.im = re * c.im + c.re * im;
+        return temp;
+    }
+    complex operator* (int n) {
+        complex temp;
+        temp.re = re * n;
+        temp.im = im * n;
+        return temp;
+    }
+    ~complex() {};
+    bool operator== (complex& c) { return module() == c.module(); }
+    bool operator!= (complex& c) { return module() != c.module(); }
+    bool operator> (complex& c) { return module() > c.module(); }
+    bool operator< (complex& c) { return module() < c.module(); }
+    friend ostream& operator <<(ostream& out, const complex& c);
+    friend istream& operator >>(istream& in, complex& c);
+};
+ostream& operator<< (ostream& out, const complex& c) {
+    if (c.re != 0) out << c.re;
+    if (c.im > 0 && c.im != 1) out << "+" << c.im << "*i";
+    if (c.im < 0 && c.im != -1) out << c.im << "*i";
+    if (c.im == 0 && c.re == 0) out << "0";
+    if (c.im == 1 && c.re != 0) out << "+i";
+    if (c.im == 1 && c.re == 0) out << "i";
+    if (c.im == -1) out << "-i";
+    return out;
+}
+istream& operator>> (istream& in, complex& c) {
+    in >> c.re;
+    in >> c.im;
+    return in;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "RUS");
+    float re1, im1;
+    cout << "Введите дейстивтельную и мнимую часть первого комплексного числа: " << endl;
+    cin >> re1 >> im1;
+    complex c1(re1, im1);
+    cout << "Первое комплексное число: " << c1 << endl;
+    float re2, im2;
+    cout << "Введите дейстивтельную и мнимую часть второго комплексного числа: " << endl;
+    cin >> re2 >> im2;
+    complex c2(re2, im2);
+    cout << "Второе комплексное число: " << c2 << endl;
+    cout << "Сложение: " << c1 + c2 << endl;
+    cout << "Умножение друг на друга: " << c1 * c2 << endl;
+    cout << "Вычитание: " << c1 - c2 << endl;
+    cout << "Умножение на число (c1 * 3): " << c1 * 3 << endl;
+    bool eq = c1 == c2;
+    bool noteq = c1 != c2;
+    bool bigger = c1 > c2;
+    bool lower = c1 < c2;
+    cout << "Логические операции: " << endl;
+    cout << "c1 == c2: " << eq << endl;
+    cout << "c1 != c2: " << noteq << endl;
+    cout << "c1 > c2: " << bigger << endl;
+    cout << "c1 < c2: " << lower << endl;
+    return 0;
+}
