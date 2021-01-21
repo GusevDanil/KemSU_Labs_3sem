@@ -1,0 +1,111 @@
+#include <iostream>
+
+using namespace std;
+
+class Table
+{
+	int* size;
+	string color;
+public:
+	Table() {}
+	Table(int a, string str) {
+			size = new int;
+			*size = a;
+			color = str;
+	};
+	~Table() { delete size; }
+	void Show() { cout << "Стол: " << endl <<  "Размер: " << *size << " | " << " Цвет: " << color << endl; }
+	virtual int CalcVolume() { return (*size) * (*size) * (*size); }
+};
+
+class CompTable : public Table {
+	int* h;
+	string material;
+public:
+	CompTable() {};
+	CompTable(int size, string color, int H, string Mater) :Table(size, color) {
+		h = new int;
+		*h = H;
+		material = Mater;
+	};
+	~CompTable() { delete h; }
+	int CalcVolume() {
+		return (*h) * (*h) * (*h); 
+	}
+	void ShowCT() {
+		Show();
+		cout << "Подставка: " << *h << " | " << material << endl;
+	}
+};
+
+class NewTable : public Table {
+	int* n;
+public:
+	NewTable() {};
+	NewTable(int size, string color, int N) :Table(size, color) {
+		n = new int;
+		*n = N;
+	};
+	~NewTable() { delete n; };
+	int CalcVolume() { return 5 * (*n); };
+	void ShowNT() {
+		Show();
+		cout << "Количество полочек, объемом 5: " << *n << endl;
+	};
+};
+
+int calcPrice(Table* t, int p) { return t->CalcVolume() * p; };
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	Table* MyT = new Table(3, "white");
+	MyT->Show();
+	cout << "Обьём стола: " << MyT->CalcVolume() << endl;
+	cout << "Цена стола: " << calcPrice(MyT, 5) << endl;
+	delete MyT;
+	cout << endl;
+	CompTable* CT = new CompTable(5, "black", 3, "wood");
+	CT->ShowCT();
+	cout << "Объем подставки: " << CT->CalcVolume() << endl;
+	cout << "Цена подставки: " << calcPrice(CT, 5) << endl;
+	delete CT;
+	cout << endl;
+	NewTable* NT = new NewTable(2, "green", 5);
+	NT->ShowNT();
+	cout << "Объем полочек: " << NT->CalcVolume() << endl;
+	cout << "Цена полочек: " << calcPrice(NT, 5) << endl;
+	delete NT;
+	cout << endl;
+	Table* lateBind = nullptr;
+	cout << "Выберите какой стол будет создаваться при помощи позднего связывания (1 - обычный, 2 - компьютерный, 3 - стол с полочками): " << endl;
+	int choise;
+	cin >> choise;
+	switch (choise) {
+		case 1:
+			lateBind = new Table(3, "white");
+			lateBind->Show();
+			cout << "Обьём стола: " << lateBind->CalcVolume() << endl;
+			cout << "Цена стола: " << calcPrice(lateBind, 5);
+			delete lateBind;
+			break;
+		case 2:
+			lateBind = new CompTable(5, "black", 3, "wood");
+			lateBind->Show();
+			cout << "Объем подставки: " << lateBind->CalcVolume() << endl;
+			cout << "Цена подставки: " << calcPrice(lateBind, 5);
+			delete lateBind;
+			break;
+		case 3:
+			lateBind = new NewTable(2, "green", 5);
+			lateBind->Show();
+			cout << "Обьём полочек: " << lateBind->CalcVolume() << endl;
+			cout << "Цена полочек: " << calcPrice(lateBind, 5);
+			delete lateBind;
+			break;
+		default:
+			cout << "Вы не выбрали стол";
+			exit(0);
+	}
+	return 0;
+}
